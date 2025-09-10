@@ -10,7 +10,7 @@ function AdminDashboardPage() {
     try {
       const token = localStorage.getItem('token');
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const response = await axios.get('http://localhost:3001/api/admin/bookings', config);
+      const response = await axios.get('https://carservicing.onrender.com/api/admin/bookings', config);
       setBookings(response.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Could not load bookings.');
@@ -25,7 +25,7 @@ function AdminDashboardPage() {
     try {
         const token = localStorage.getItem('token');
         const config = { headers: { Authorization: `Bearer ${token}` } };
-        const response = await axios.put(`http://localhost:3001/api/admin/bookings/${bookingId}/status`, { status: newStatus }, config);
+        const response = await axios.put(`https://carservicing.onrender.com/api/admin/bookings/${bookingId}/status`, { status: newStatus }, config);
         setMessage(response.data.message);
         // Refresh the bookings list to show the updated status
         fetchAllBookings();

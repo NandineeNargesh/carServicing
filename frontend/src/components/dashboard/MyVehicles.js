@@ -12,7 +12,7 @@ function MyVehicles() {
     try {
       const token = localStorage.getItem('token');
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const response = await axios.get('http://localhost:3001/api/vehicles', config);
+      const response = await axios.get('https://carservicing.onrender.com/api/vehicles', config);
       setVehicles(response.data);
     } catch (err) {
       setError('Could not load your vehicles.');
@@ -34,7 +34,7 @@ function MyVehicles() {
     try {
       const token = localStorage.getItem('token');
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const response = await axios.post('http://localhost:3001/api/vehicles/add', formData, config);
+      const response = await axios.post('https://carservicing.onrender.com/api/vehicles/add', formData, config);
       setMessage(response.data.message);
       setFormData({ make: '', model: '', registration_number: '' });
       fetchVehicles();

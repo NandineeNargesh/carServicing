@@ -9,7 +9,7 @@ function BookingHistory() {
     try {
       const token = localStorage.getItem('token');
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const response = await axios.get('http://localhost:3001/api/bookings/history', config);
+      const response = await axios.get('https://carservicing.onrender.com/api/bookings/history', config);
       setBookings(response.data);
     } catch (err) {
       setError('Could not load your booking history.');

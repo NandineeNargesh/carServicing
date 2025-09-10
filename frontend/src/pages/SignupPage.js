@@ -30,7 +30,7 @@ function SignupPage() {
 
     try {
       // Send a POST request to the backend's register endpoint
-      const response = await axios.post('http://localhost:3001/api/auth/register', formData);
+      const response = await axios.post('https://carservicing.onrender.com/api/auth/register', formData);
       
       // Handle success
       setMessage(response.data.message); // Show success message from backend

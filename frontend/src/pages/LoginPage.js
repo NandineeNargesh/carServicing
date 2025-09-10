@@ -23,7 +23,7 @@ function LoginPage() {
     };
 
     try {
-      const response = await axios.post('http://localhost:3001/api/auth/login', loginPayload);
+      const response = await axios.post('https://carservicing.onrender.com/api/auth/login', loginPayload);
       const { token, isAdmin } = response.data;
       
       localStorage.setItem('token', token);
