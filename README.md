@@ -1,44 +1,65 @@
-LIVE LINK : https://car-servicing-h5xn.vercel.app/
+# Vehicle Service Booking Application 🚗🛠️
 
+🌐 **Live Demo:**  
+👉 https://car-servicing-h5xn.vercel.app/
 
-Vehicle Service Booking Application
-This is a full-stack web application for booking and managing vehicle service appointments. It features a modern, single-page user interface, a customer dashboard for managing vehicles and bookings, and a secure admin panel for service management.
+---
 
-Core Features
-User Authentication: Secure user registration and login with JWT (JSON Web Tokens).
+## 📌 About the Project
+A full-stack web application for booking and managing **vehicle service appointments**.  
+The platform includes a **customer dashboard** for vehicle management, a **secure admin panel** for service management, and **real-time notifications via SMS and email**.  
+Built to simulate a modern, professional service booking system.
 
-Customer Dashboard: A private dashboard for logged-in users to:
+---
 
-Add and manage their personal vehicles.
+## ✨ Core Features
 
-Book new service appointments.
+### User Features
+- **User Authentication:** Secure registration and login using JWT (JSON Web Tokens)  
+- **Customer Dashboard:**
+  - Add and manage personal vehicles
+  - Book new service appointments
+  - View booking history and track live service status
 
-View their booking history and track the live status of their service.
+### Admin Features
+- **Admin Dashboard:** Secure, role-protected panel for the service company
+  - View all customer bookings
+  - Update booking/service status (e.g., "Booking Confirmed" → "Service In Progress")
 
-Admin Dashboard: A secure, role-protected dashboard for the service company to:
+### Notifications
+- **SMS Notifications:** Customers receive automatic SMS updates via Twilio whenever booking status changes
+- **Email Notifications:** Customers can also receive updates through email (if configured)
 
-View all bookings from all customers.
+---
 
-Update the status of any service (e.g., "Booking Confirmed" -> "Service In Progress").
+## 🛠️ Technology Stack
 
-SMS Notifications: Automatic SMS updates are sent to customers via Twilio whenever their booking status is changed by an admin.
+### Frontend
+- React (Create React App)  
+- Axios  
+- react-scroll
 
-Technology Stack
-Frontend: React (Create React App), axios, react-scroll
+### Backend
+- Node.js  
+- Express.js  
 
-Backend: Node.js, Express.js
+### Database
+- MySQL  
 
-Database: MySQL
+### Authentication & Security
+- JWT (JSON Web Tokens)  
+- bcryptjs  
 
-Authentication: JWT (JSON Web Tokens), bcryptjs
+### Notifications
+- Twilio API (SMS)  
+- Email service (SMTP / nodemailer)
 
-Notifications: Twilio API for SMS
+### Deployment
+- Frontend: Vercel / Netlify  
+- Backend & Database: Render
 
-Deployment:
+---
 
-Frontend hosted on Vercel/Netlify.
-
-Backend and Database hosted on Render.
 
 Setup and Installation
 Prerequisites
@@ -96,8 +117,12 @@ Start the frontend application:
 
 npm start
 The application will open in your browser at http://localhost:3000.
+ 
+ 
+---
 
-Application Flow
+# Application Flow
+
 A new user registers and logs in.
 
 The user is redirected to their dashboard, where they can add a vehicle.
