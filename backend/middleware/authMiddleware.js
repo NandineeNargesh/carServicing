@@ -5,15 +5,10 @@ const protect = (req, res, next) => {
 
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     try {
-      // Get token from header
       token = req.headers.authorization.split(' ')[1];
-
-      // Verify token
-      const decoded = jwt.verify(token, 'your_jwt_secret_key');
-
-      // Attach user id to the request
+      // Use the secret from your .env file
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret_key');
       req.userId = decoded.userId;
-
       next();
     } catch (error) {
       res.status(401).json({ message: 'Not authorized, token failed' });

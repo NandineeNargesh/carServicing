@@ -2,11 +2,11 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const mysql = require('mysql2');
+const { Pool } = require('pg'); // Changed from mysql2 to pg
 const createAuthRoutes = require('./routes/authRoutes');
 const createVehicleRoutes = require('./routes/vehicleRoutes'); 
 const createBookingRoutes = require('./routes/bookingRoutes'); 
-const createAdminRoutes = require('./routes/adminRoutes'); // 1. ADD THIS IMPORT
+const createAdminRoutes = require('./routes/adminRoutes');
 
 // 2. Set up Express App
 const app = express();
@@ -16,44 +16,35 @@ const PORT = process.env.PORT || 3001;
 app.use(cors({ origin: 'http://localhost:3000' })); 
 app.use(express.json());
 
-// 4. Create a MySQL Connection Pool
-const db = mysql.createPool({
+// 4. Create a PostgreSQL Connection Pool
+const db = new Pool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
-}).promise();
+    database: process.env.DB_NAME,
+    port: 5432,
+    ssl: { rejectUnauthorized: false } // Required for Render/Cloud DBs
+});
 
 // 5. Define Routes
-// Test route
+// Test route to confirm connection
 app.get('/api/test-db', async (req, res) => {
     try {
-        const [results] = await db.query('SELECT 1');
-        res.status(200).json({ success: true, message: 'Database connection successful!' });
+        const result = await db.query('SELECT NOW()');
+        res.status(200).json({ success: true, message: 'PostgreSQL connection successful!', time: result.rows[0] });
     } catch (error) {
         console.error('Database connection error:', error);
-        res.status(500).json({ success: false, message: 'Database connection failed.' });
+        res.status(500).json({ success: false, message: 'Database connection failed.', error: error.message });
     }
 });
 
-// Use the authentication routes
-const authRoutes = createAuthRoutes(db);
-app.use('/api/auth', authRoutes);
-
-// Use the vehicle routes
-const vehicleRoutes = createVehicleRoutes(db);
-app.use('/api/vehicles', vehicleRoutes);
-
-// Use the booking routes
-const bookingRoutes = createBookingRoutes(db);
-app.use('/api/bookings', bookingRoutes); 
-
-// Use the admin routes
-const adminRoutes = createAdminRoutes(db);      // 2. ADD THIS LINE
-app.use('/api/admin', adminRoutes);
+// Use the routes
+app.use('/api/auth', createAuthRoutes(db));
+app.use('/api/vehicles', createVehicleRoutes(db));
+app.use('/api/bookings', createBookingRoutes(db)); 
+app.use('/api/admin', createAdminRoutes(db));
 
 // 6. Start the Server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
-
