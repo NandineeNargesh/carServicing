@@ -22,9 +22,13 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors({
-  origin: 'http://localhost:3000',
-  methods: ['GET','POST','PUT','DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  origin: [
+    'http://localhost:3000', 
+    'https://car-service-fawn-gamma.vercel.app' // 👈 Aapka copied link
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 
 app.use(express.json());
@@ -35,6 +39,20 @@ const isAdmin = (req, res, next) => {
     return res.status(403).json({ message: "Admin access required" });
   }
   next();
+};
+
+
+const handleBookNow = (service) => {
+  const token = localStorage.getItem('token'); // Check karein ki user logged in hai ya nahi
+
+  if (!token) {
+    // Agar token nahi hai, toh use Signup/Login par bhej dein
+    alert("Please Login first to book a service!");
+    navigate('/signup'); 
+  } else {
+    // Agar token hai, toh booking page ya vehicle form par bhej dein
+    navigate('/add-vehicle', { state: { service } });
+  }
 };
 
 // ====== AUTH SIGNUP (New Route with Phone Number) ======

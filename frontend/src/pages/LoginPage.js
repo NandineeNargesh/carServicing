@@ -6,7 +6,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [message, setMessage] = useState('');
-
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
   // Handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,7 +19,7 @@ function LoginPage() {
 
     try {
       const response = await axios.post(
-        'http://localhost:3001/api/auth/login', // Change to Render URL for production
+        `${API_BASE}/auth/login`, // Change to Render URL for production
         {
           email: formData.email,
           password: formData.password,

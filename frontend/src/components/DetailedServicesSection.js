@@ -21,7 +21,12 @@ function DetailedServicesSection() {
         </div>
         <div className="banner-actions">
                    <Link to={bookNowLink} className="btn btn-primary">Book Now</Link>
-          <button style={{padding: '15.2px'}} className="btn btn-secondary">Contact Us</button>
+           <button 
+  className="btn btn-secondary" style={{padding: '15.2px'}} 
+  onClick={() => window.location.href = "mailto:nandineenargesh@gmail.com?subject=Inquiry for Car Service&body=Hi Nandinee, I want to know more about..."}
+>
+  Contact Us
+</button>
 
         </div>
         <div className="services-grid">

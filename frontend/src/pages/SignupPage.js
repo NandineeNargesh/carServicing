@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 function SignupPage() {
   const [formData, setFormData] = useState({
     name: '',
@@ -26,7 +26,7 @@ function SignupPage() {
       // NOTE: Make sure this URL matches your backend route exactly
       // If your backend is /api/auth/signup, change it here
       const response = await axios.post(
-        'http://localhost:3001/api/auth/signup', 
+        `${API_BASE}/auth/signup`, 
         formData
       );
 

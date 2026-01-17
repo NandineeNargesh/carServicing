@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 // Yahan LOCALHOST use karein taaki local backend se connect ho sake
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = `${API_BASE}/api`;
 
 function BookService() {
   const [vehicles, setVehicles] = useState([]);

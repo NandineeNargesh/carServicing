@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 function MyVehicles() {
   const [vehicles, setVehicles] = useState([]);
   const [formData, setFormData] = useState({ make: '', model: '', registration_number: '' });
@@ -10,7 +10,7 @@ function MyVehicles() {
 
   // ⚠️ Note: Local testing ke liye localhost use karein, 
   // Deployment ke liye apni render wali URL.
-  const API_URL = 'http://localhost:3001/api/vehicles'; 
+  const API_URL = `${API_BASE}/vehicles`;
 
   const fetchVehicles = useCallback(async () => {
     try {

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 // YAHAN CHECK KAREIN: Localhost hi hona chahiye
-const API_URL = 'http://localhost:3001/api/bookings/history';
+const API_URL = `${API_BASE}/bookings/history`;
 
 function BookingHistory() {
   const [bookings, setBookings] = useState([]);

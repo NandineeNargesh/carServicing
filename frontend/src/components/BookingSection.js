@@ -13,7 +13,12 @@ function BookingSection() {
           <h2>Book Your Premium Car Wash Today</h2>
           <div className="contact-buttons">
             <button className="btn btn-primary">Book Now</button>
-            <button className="btn btn-secondary">Contact Us</button>
+          <button 
+  className="btn btn-secondary"
+  onClick={() => window.location.href = "mailto:nandineenargesh@gmail.com?subject=Inquiry for Car Service&body=Hi Nandinee, I want to know more about..."}
+>
+  Contact Us
+</button>
           </div>
         </div>
         <div className="contact-right">
@@ -24,7 +29,7 @@ function BookingSection() {
         <div className="footer-contact-info">
           <div>
             <p>EMAIL</p>
-            <h3>user@gmail.com</h3>
+            <h3>carservices@gmail.com</h3>
           </div>
           <div>
             <p>SOCIAL MEDIA</p>

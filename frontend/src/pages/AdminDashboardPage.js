@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
-const API_BASE = 'http://localhost:3001/api/admin';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const API_BASE_ADMIN = `${API_BASE}/admin`;
 
 function AdminDashboardPage() {
   const [bookings, setBookings] = useState([]);

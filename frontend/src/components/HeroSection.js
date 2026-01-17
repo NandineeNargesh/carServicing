@@ -16,10 +16,16 @@ function HeroSection() {
         <div className="hero-text-and-buttons">
                    <h1>Bringing Your Car's Shine Back to Life</h1>
                    <p>Professional detailing, advanced technology, and showroom-quality results.</p>
-                   <div className="hero-buttons">
-                   <Link to={bookNowLink} className="btn btn-primary">Book Now</Link>
-            <Link to="/contact" className="btn btn-secondary">Contact Us</Link>
-                   </div>
+ <div className="hero-buttons">
+ <Link to={bookNowLink} className="btn btn-primary">Book Now</Link>
+ <button 
+   className="btn btn-secondary" 
+   style={{padding: '15.2px'}} 
+   onClick={() => window.location.href = "mailto:nandineenargesh@gmail.com?subject=Inquiry for Car Service&body=Hi Nandinee, I want to know more about..."}
+ >
+   Contact Us
+ </button>
+ </div>
                  </div>
                  
                  {/* The three small images now live here */}
