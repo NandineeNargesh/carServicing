@@ -1,50 +1,148 @@
-// 1. Import Dependencies
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { Pool } = require('pg'); // Changed from mysql2 to pg
-const createAuthRoutes = require('./routes/authRoutes');
-const createVehicleRoutes = require('./routes/vehicleRoutes'); 
-const createBookingRoutes = require('./routes/bookingRoutes'); 
-const createAdminRoutes = require('./routes/adminRoutes');
+const { Pool } = require('pg');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const vehicleRoutes = require('./routes/vehicleRoutes');
+const { protect } = require("./middleware/authMiddleware");  // ✅ USE THIS
+const bookingRoutes = require('./routes/bookingRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
-// 2. Set up Express App
+const db = new Pool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: 5432,
+  ssl: { rejectUnauthorized: false }
+});
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// 3. Set up Middleware
-app.use(cors({ origin: 'http://localhost:3000' })); 
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET','POST','PUT','DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
-// 4. Create a PostgreSQL Connection Pool
-const db = new Pool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: 5432,
-    ssl: { rejectUnauthorized: false } // Required for Render/Cloud DBs
-});
+// --- Admin middleware ---
+const isAdmin = (req, res, next) => {
+  if (!req.is_admin) {
+    return res.status(403).json({ message: "Admin access required" });
+  }
+  next();
+};
 
-// 5. Define Routes
-// Test route to confirm connection
-app.get('/api/test-db', async (req, res) => {
-    try {
-        const result = await db.query('SELECT NOW()');
-        res.status(200).json({ success: true, message: 'PostgreSQL connection successful!', time: result.rows[0] });
-    } catch (error) {
-        console.error('Database connection error:', error);
-        res.status(500).json({ success: false, message: 'Database connection failed.', error: error.message });
+// ====== AUTH SIGNUP (New Route with Phone Number) ======
+app.post('/api/auth/signup', async (req, res) => {
+  try {
+    const { name, email, password, phone } = req.body;
+
+    // 1. Check if user already exists
+    const existingUser = await db.query(
+      "SELECT * FROM public.users WHERE email = $1", 
+      [email]
+    );
+
+    if (existingUser.rows.length > 0) {
+      return res.status(400).json({ message: "User already exists with this email" });
     }
+
+    // 2. Hash the password (using bcrypt which you already imported)
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // 3. Insert user into Database (including phone_number)
+    const newUser = await db.query(
+      `INSERT INTO public.users (name, email, password, phone_number, is_admin) 
+       VALUES ($1, $2, $3, $4, $5) 
+       RETURNING id, name, email, is_admin`,
+      [name, email, hashedPassword, phone, false] // default is_admin is false
+    );
+
+    res.status(201).json({
+      message: "User registered successfully",
+      user: newUser.rows[0]
+    });
+
+  } catch (err) {
+    console.error("Signup Error:", err);
+    res.status(500).json({ message: "Server error during registration" });
+  }
 });
 
-// Use the routes
-app.use('/api/auth', createAuthRoutes(db));
-app.use('/api/vehicles', createVehicleRoutes(db));
-app.use('/api/bookings', createBookingRoutes(db)); 
-app.use('/api/admin', createAdminRoutes(db));
+// ====== AUTH LOGIN (KEEP YOURS AS IS) ======
 
-// 6. Start the Server
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const userResult = await db.query(
+      "SELECT * FROM public.users WHERE email=$1",
+      [email]
+    );
+
+    if (!userResult.rows.length) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const user = userResult.rows[0];
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const token = jwt.sign(
+      { userId: user.id, is_admin: user.is_admin },
+      process.env.JWT_SECRET,
+      { expiresIn: "2h" }
+    );
+
+    res.json({
+      message: "Login successful",
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        is_admin: user.is_admin
+      }
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
 });
+
+// ====== VEHICLE ROUTES (MOST IMPORTANT LINE) ======
+app.use("/api/admin", adminRoutes(db));
+app.use("/api/vehicles", protect, vehicleRoutes(db));  // ✅ CORRECT
+app.use("/api/bookings", protect, bookingRoutes(db));
+// ====== BOOKING ROUTE (already fine) ======
+
+app.post('/api/bookings/create', protect, async (req, res) => {
+  try {
+    const { vehicle_id, service_type, booking_date, time_slot } = req.body;
+
+    await db.query(
+      `INSERT INTO bookings 
+       (user_id, vehicle_id, service_type, booking_date, time_slot)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [req.userId, vehicle_id, service_type, booking_date, time_slot]
+    );
+
+    res.json({ message: "Service booked successfully" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Booking failed" });
+  }
+});
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

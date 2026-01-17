@@ -21,7 +21,7 @@ function DetailedServicesSection() {
         </div>
         <div className="banner-actions">
                    <Link to={bookNowLink} className="btn btn-primary">Book Now</Link>
-          <button className="btn btn-secondary">Contact Us</button>
+          <button style={{padding: '15.2px'}} className="btn btn-secondary">Contact Us</button>
 
         </div>
         <div className="services-grid">

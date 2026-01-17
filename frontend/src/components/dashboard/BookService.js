@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
+// Yahan LOCALHOST use karein taaki local backend se connect ho sake
+const API_BASE_URL = 'http://localhost:3001/api';
+
 function BookService() {
   const [vehicles, setVehicles] = useState([]);
   const [bookingData, setBookingData] = useState({
@@ -15,17 +18,20 @@ function BookService() {
   const fetchVehicles = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
+      if (!token) throw new Error('No token found. Please log in.');
+
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const response = await axios.get('https://carservicing.onrender.com/api/vehicles', config);
+      // Sahi URL: localhost wala
+      const response = await axios.get(`${API_BASE_URL}/vehicles`, config);
       
       setVehicles(response.data);
 
+      // Pehla vehicle automatically select karne ke liye
       if (response.data.length > 0) {
         setBookingData(prevData => ({ ...prevData, vehicle_id: response.data[0].id }));
       }
-
     } catch (err) {
-      setError('Could not load your vehicles.');
+      setError(err.response?.data?.message || 'Could not load your vehicles.');
     }
   }, []);
 
@@ -50,7 +56,9 @@ function BookService() {
     try {
       const token = localStorage.getItem('token');
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const response = await axios.post('https://carservicing.onrender.com/api/bookings/create', bookingData, config);
+      
+      // Sahi URL: localhost wala
+      const response = await axios.post(`${API_BASE_URL}/bookings/create`, bookingData, config);
       setMessage(response.data.message);
     } catch (err) {
       setError(err.response?.data?.message || 'Booking failed. Please try again.');
@@ -82,10 +90,10 @@ function BookService() {
         <div className="input-group">
           <label htmlFor="service_type">Service Type</label>
           <select name="service_type" value={bookingData.service_type} onChange={handleChange} required>
-            <option>General Service</option>
-            <option>Oil Change</option>
-            <option>Tire Rotation</option>
-            <option>Full Detailing</option>
+            <option value="General Service">General Service</option>
+            <option value="Oil Change">Oil Change</option>
+            <option value="Tire Rotation">Tire Rotation</option>
+            <option value="Full Detailing">Full Detailing</option>
           </select>
         </div>
         
