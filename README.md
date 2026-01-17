@@ -1,136 +1,82 @@
-# Vehicle Service Booking Application 🚗🛠️
+#🚗 Car Servicing Management System
+A production-ready Full-Stack (PERN) application built to automate car service bookings, manage vehicle records, and provide real-time status tracking for both customers and administrators.
 
-🌐 **Live Demo:**  
-👉 https://car-servicing-h5xn.vercel.app/
+#🚀 Live Demo
+Frontend: https://car-service-fawn-gamma.vercel.app
 
----
+Backend: https://carservicing.onrender.com
 
-## 📌 About the Project
-A full-stack web application for booking and managing **vehicle service appointments**.  
-The platform includes a **customer dashboard** for vehicle management, a **secure admin panel** for service management, and **real-time notifications via SMS and email**.  
-Built to simulate a modern, professional service booking system.
+#🛠️ Tech Stack
+Layer      Technology
+Frontend   React.js, Tailwind CSS, Axios, React Router
+Backend    Node.js, Express.js
+Database   PostgreSQL
+Auth       JSON Web Tokens (JWT), Bcrypt.js
+Deployment Vercel (Frontend), Render (Backend)
 
----
+#🔑 Credentials for Testing
+To explore the application without creating a new account, you can use the following credentials:
 
-## ✨ Core Features
+Admin Access
+Email: admin@gmail.com
 
-### User Features
-- **User Authentication:** Secure registration and login using JWT (JSON Web Tokens)  
-- **Customer Dashboard:**
-  - Add and manage personal vehicles
-  - Book new service appointments
-  - View booking history and track live service status
+Password: 123456
 
-### Admin Features
-- **Admin Dashboard:** Secure, role-protected panel for the service company
-  - View all customer bookings
-  - Update booking/service status (e.g., "Booking Confirmed" → "Service In Progress")
+Customer Access
+New User: Please use the Signup page to create a unique account.
 
-### Notifications
-- **SMS Notifications:** Customers receive automatic SMS updates via Twilio whenever booking status changes
-- **Email Notifications:** Customers can also receive updates through email (if configured)
+Note: During signup, provide a valid email and phone number to test the registration flow.
 
----
+#✨ Key Features
+    #For Customers
+Secure Authentication: JWT-based login and signup with password hashing.
 
-## 🛠️ Technology Stack
+Vehicle Enrollment: Seamlessly add vehicle details (Make, Model, Reg No) before booking.
 
-### Frontend
-- React (Create React App)  
-- Axios  
-- react-scroll
+Service Selection: Choose from specialized services like Oil Change, Engine Repair, or General Wash.
 
-### Backend
-- Node.js  
-- Express.js  
+Real-time Progress: Track your vehicle's status from 'Confirmed' to 'Ready for Pickup' through a visual progress bar.
 
-### Database
-- MySQL  
+  #For Administrators
+Centralized Dashboard: Monitor all customer bookings in a single, high-level view.
 
-### Authentication & Security
-- JWT (JSON Web Tokens)  
-- bcryptjs  
+Quick Management: Update service statuses via a premium dropdown interface.
 
-### Notifications
-- Twilio API (SMS)  
-- Email service (SMTP / nodemailer)
+Business Insights: View statistics for total, active, and completed services at a glance.
 
-### Deployment
-- Frontend: Vercel / Netlify  
-- Backend & Database: Render
-
----
+Search Functionality: Filter bookings by customer name or vehicle registration number.
 
 
-Setup and Installation
-Prerequisites
-Node.js and npm
+#📁 Project Structure
+├── client/                 # React.js Frontend
+│   ├── src/
+│   │   ├── pages/          # AdminDashboard, Login, Signup, Booking
+│   │   ├── components/     # Navbar, ProtectedRoutes
+│   │   └── App.js          # Routing logic
+├── server/                 # Node.js & Express Backend
+│   ├── routes/             # Admin, Booking, Vehicle, and Auth routes
+│   ├── middleware/         # Auth verification (protect middleware)
+│   └── server.js           # Server entry point & CORS config
+└── .env                    # Environment variables (DB_URL, JWT_SECRET)
 
-A running MySQL server
+#⚙️ Local Installation
 
-A Twilio account with credentials
+1.Clone the repository:
 
-1. Backend Setup
-Navigate to the backend directory:
+git clone https://github.com/NandineeNargesh/carServicing.git
+cd carServicing
+Setup Backend:
 
-
-
-cd backend
-Install the required packages:
-
-
-
+2.cd server
 npm install
-Create a .env file in the backend root and add your credentials:
-
-
-
-DB_HOST=localhost
-DB_USER=your_db_user
-DB_PASSWORD=your_db_password
-DB_NAME=vehicle_service
-PORT=3001
-TWILIO_ACCOUNT_SID=your_twilio_sid
-TWILIO_AUTH_TOKEN=your_twilio_auth_token
-TWILIO_PHONE_NUMBER=your_twilio_phone_number
-Set up the database by running the SQL schema script in your MySQL tool.
-
-Start the backend server:
-
-
-
+# Create a .env file with your DB credentials
 npm start
-The server will be running at http://localhost:3001.
 
-2. Frontend Setup
-Open a new terminal and navigate to the frontend directory:
+3.Setup Frontend:
 
-
-
-cd frontend
-Install the required packages:
-
-
-
+cd ../client
 npm install
-Start the frontend application:
-
-
 npm start
-The application will open in your browser at http://localhost:3000.
- 
- 
----
 
-# Application Flow
-
-A new user registers and logs in.
-
-The user is redirected to their dashboard, where they can add a vehicle.
-
-The user books a service for their vehicle.
-
-An admin logs in using the special admin login and navigates to the admin dashboard.
-
-The admin sees the new booking and updates its status.
-
-Upon the status update, the user receives an automatic SMS notification.
+#👩‍💻 Developer
+Nandinee Nargesh Fourth-Year Information Technology Engineering Student Aspiring Software Engineer
