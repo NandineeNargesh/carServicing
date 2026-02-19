@@ -63,24 +63,10 @@ This system provides a seamless and intuitive experience with secure authenticat
 
 ---
 
-## 📁 Project Structure  
--- carServicing/
-│
-├── client/ # React Frontend
-│ ├── src/
-│ │ ├── pages/ # AdminDashboard, Login, Signup, Booking
-│ │ ├── components/ # Navbar, ProtectedRoutes
-│ │ └── App.js # Routing logic
-│
-├── server/ # Node.js & Express Backend
-│ ├── routes/ # Admin, Booking, Vehicle, and Auth routes
-│ ├── middleware/ # JWT authentication middleware
-│ └── server.js # Server entry point & CORS config
-│
-└── .env # Environment variables
 
 
----
+
+
 
 ## ⚙️ Local Setup  
 
